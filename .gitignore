@@ -1,3 +1,5 @@
 .idea/*
 *.iml
-hive_migrations/
+*.swp
+tags
+**/migration-done
