@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
 
-# restart ssh daemon
-/usr/sbin/sshd &
+# start supervisord
+/usr/bin/supervisord &
 
 # Wait for DFS to come out of safe mode
 until hdfs dfsadmin -safemode wait
@@ -12,11 +12,16 @@ do
     hdfs dfsadmin -safemode leave
 done
 
+# hue's mysql
+if [ -x "/root/migration.sh" ]; then
+	/root/migration.sh
+fi
 
 sudo -u hdfs hdfs dfs -mkdir /user/hue
 sudo -u hdfs hdfs dfs -chmod -R 1777 /user/hue
 sudo -u hdfs hdfs dfs -chown hue:hadoop /user/hue
 
+# start hue by daemon
 service hue start
 /etc/init.d/daemon hue &
 

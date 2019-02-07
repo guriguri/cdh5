@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  kafka:
+    build: kafka
+    hostname: kafka
+    ports:
+      # kafka broker port
+      - "9092:9092"
+    volumes:
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - "/cdh5/conf/conf.hue:/etc/hue/conf:ro"
+      #- "./kafka/conf:/etc/kafka/conf:ro"
+    networks:
+      - local

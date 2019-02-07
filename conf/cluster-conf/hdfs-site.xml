@@ -67,4 +67,11 @@
     <name>dfs.support.append</name>
     <value>true</value>
   </property>
+
+  <!-- for connect in remote
+  <property>
+    <name>dfs.client.use.datanode.hostname</name>
+    <value>true</value>
+  </property>
+  -->
 </configuration>

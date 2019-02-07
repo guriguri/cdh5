@@ -1,0 +1,16 @@
+--- mongodb.org	2019-02-03 21:06:28.550979925 +0900
++++ mongodb	2019-02-03 21:17:24.183926048 +0900
+@@ -122,9 +122,10 @@
+ 
+ stop_server() {
+ # Stop the process using the wrapper
+-            start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+-                        --user $DAEMONUSER \
+-                        --exec $DAEMON
++#            start-stop-daemon --stop --quiet --pidfile $PIDFILE \
++#                        --user $DAEMONUSER \
++#                        --exec $DAEMON
++            $DAEMON --quiet --config $CONF --shutdown 
+             errcode=$?
+ 	return $errcode
+ }

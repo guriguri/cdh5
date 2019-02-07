@@ -36,4 +36,11 @@
     <name>yarn.app.mapreduce.am.staging-dir</name>
     <value>/user</value>
   </property>
+
+  <!-- for connect by hostname in remote
+  <property>
+    <name>yarn.app.mapreduce.am.job.client.port-range</name>
+    <value>50200-50210</value>
+  </property>
+  -->
 </configuration>

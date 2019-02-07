@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
 
-# restart ssh daemon
-/usr/sbin/sshd &
+# start supervisord
+/usr/bin/supervisord &
 
 # Wait for DFS to come out of safe mode
 until hdfs dfsadmin -safemode wait
@@ -20,6 +20,7 @@ do
     sleep 1
 done
 
+# start hadoop-mapreduce-historyserver by daemon
 service hadoop-mapreduce-historyserver start
 /etc/init.d/daemon hadoop-mapreduce-historyserver &
 

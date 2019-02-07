@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  mongodb:
+    build: mongodb
+    hostname: mongodb
+    ports:
+      # - 27017: process
+      # - 28017: http
+      - "27017:27017"
+      - "28017:28017"
+    volumes:
+      - mongodb:/var/lib/mongodb
+    networks:
+      - local
+
+networks:
+  local:
+    external:
+      name: cdh5-local
+
+volumes:
+  mongodb:

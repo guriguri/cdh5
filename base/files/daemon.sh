@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function start_service_if_not_running {
-   dead=$(/etc/init.d/"$1" status | grep -E "dead|not running|killed" )
+   dead=$(/etc/init.d/"$1" status | grep -E "dead|not running|killed|fail" )
    echo $dead
    if [ ${#dead} -ge 1 ]; then
       echo "starting $1"

@@ -1,7 +1,8 @@
 #!/bin/bash
 set -x
-# restart ssh daemon
-/usr/sbin/sshd &
+
+# start supervisord
+/usr/bin/supervisord &
 
 # Wait for DFS to come out of safe mode
 until hdfs dfsadmin -safemode wait
@@ -11,6 +12,7 @@ do
     hdfs dfsadmin -safemode leave
 done
 
+# start kafka-server
 service kafka-server start
 
 tail -f `find /var/log -name *.log -or -name *.out`

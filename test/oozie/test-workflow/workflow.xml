@@ -1,0 +1,29 @@
+<workflow-app name="test_hive_select_userinfo" xmlns="uri:oozie:workflow:0.5">
+    <start to="hive-load"/>
+    <kill name="Kill">
+        <message>작업 실패, 오류 메시지[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <action name="hive-load" cred="hive2">
+        <hive2 xmlns="uri:oozie:hive2-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <jdbc-url>jdbc:hive2://hiveserver.cdh5-local:10000/default</jdbc-url>
+            <script>${wf:appPath()}/hive-load.sql</script>
+            <param>input=${wf:appPath()}/passwd</param>
+        </hive2>
+        <ok to="hive-select"/>
+        <error to="Kill"/>
+    </action>
+    <action name="hive-select" cred="hive2">
+        <hive2 xmlns="uri:oozie:hive2-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <jdbc-url>jdbc:hive2://hiveserver.cdh5-local:10000/default</jdbc-url>
+            <script>${wf:appPath()}/hive-select.sql</script>
+            <param>output=${wf:appPath()}/result</param>
+        </hive2>
+        <ok to="End"/>
+        <error to="Kill"/>
+    </action>
+    <end name="End"/>
+</workflow-app>

@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  oozie:
+    build: oozie
+    hostname: oozie
+    depends_on:
+      - hdfsnamenode
+      - hivemetastore
+    ports:
+      # oozie server http port
+      - "11000:11000"
+    volumes:
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+    networks:
+      - local

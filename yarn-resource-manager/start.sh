@@ -1,7 +1,8 @@
 #!/bin/bash
 set -x
-# restart ssh daemon
-/usr/sbin/sshd &
+
+# start supervisord
+/usr/bin/supervisord &
 
 # Wait for DFS to come out of safe mode
 until hdfs dfsadmin -safemode wait
@@ -22,6 +23,7 @@ sudo -u hdfs hdfs dfs -chown mapred:hadoop /user/history
 sudo -u hdfs hadoop fs -mkdir -p /var/log/hadoop-yarn
 sudo -u hdfs hadoop fs -chown yarn:mapred /var/log/hadoop-yarn
 
+# start hadoop-yarn-resourcemanager by daemon
 service hadoop-yarn-resourcemanager start
 /etc/init.d/daemon hadoop-yarn-resourcemanager &
 

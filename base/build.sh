@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build --rm=true -t tilakpatidar/ubuntu-cdh5-base .
+docker build --rm=true -t guriguri/ubuntu-cdh5-base .

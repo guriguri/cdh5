@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
 
-# restart ssh daemon
-/usr/sbin/sshd &
+# start supervisord
+/usr/bin/supervisord &
 
 # Service start order:
 #   1. HDFS DataNode

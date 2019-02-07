@@ -13,95 +13,122 @@ services:
   zookeeper:
     build: zookeeper
     hostname: zookeeper
+    depends_on:
+      - dns
     networks:
       - local
 
   hdfsnamenode:
     build: hdfs-namenode
     hostname: hdfsnamenode
+    depends_on:
+      - zookeeper
+    ports:
+      # fs.defaultFS:8020
+      # dfs.namenode.http-address:50070
+      - "8020:8020"
+      - "50070:50070"
     volumes:
-      - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - hadoop_namenode:/var/lib/hadoop-hdfs/cache/hdfs/dfs/name
+    networks:
+      - local
+
+  clusternode:
+    build: cluster-node
+    hostname: clusternode
+    depends_on:
+      - hdfsnamenode
+    ports:
+      # yarn.nodemanager.webapp.address: 8042
+      # dfs.datanode.address: 50010
+      # dfs.datanode.http.address: 50075
+      # yarn.app.mapreduce.am.job.client.port-range: 50200-50210
+      - "8042:8042"
+      - "50010:50010"
+      - "50075:50075"
+      - "50200:50210"
+    volumes:
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - hadoop_datanode1:/var/lib/hadoop-hdfs/cache/hdfs/dfs/data
     networks:
       - local
 
   yarnresourcemanager:
     build: yarn-resource-manager
-    volumes:
-      - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
     hostname: yarnresourcemanager
+    depends_on:
+      - hdfsnamenode
+    ports:
+      # yarn.resourcemanager.scheduler.address: 8030
+      # yarn.resourcemanager.resource-tracker.address: 8031
+      # yarn.resourcemanager.address: 8032
+      # yarn.resourcemanager.admin.address: 8033
+      # yarn.resourcemanager.webapp.address: 8088
+      - "8030-8033:8030-8033"
+      - "8088:8088"
+    volumes:
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+    networks:
+      - local
+
+  hivemetastore:
+    # for hive, hue, oozie
+    build: hive-metastore
+    hostname: hivemetastore
+    depends_on:
+      - hdfsnamenode
+    ports:
+      # mysql: 3306
+      # hive.metastore.uris: 9086
+      - "3306:3306"
+      - "9083:9083"
+    volumes:
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - hivemetastore:/var/lib/mysql
     networks:
       - local
 
   mapreducehistory:
     build: mapreduce-history
     hostname: mapreducehistory
+    depends_on:
+      - yarnresourcemanager
+    ports:
+      # mapreduce.jobhistory.address:10020
+      # mapreduce.jobhistory.webapp.address: 19888
+      - "10020:10020"
+      - "19888:19888"
     volumes:
-      - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
     networks:
       - local
-
-  clusternode:
-    build: cluster-node
-    domainname: cdh5-local
-    volumes:
-      - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
-    networks:
-      - local
-
-  hiveserver:
-    build: hive-server
-    volumes:
-      - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
-    hostname: hiveserver
-    networks:
-      - local
-
-  hivemetastore:
-     environment:
-           POSTGRES_VERSION: 9.5
-           PGPASSWORD: elephants
-     hostname: hivemetastore
-     build: hive-metastore
-     volumes:
-       - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
-       - "./hive_migrations:/usr/lib/hive/hive_migrations:rw"
-     networks:
-       - local
-
-  postgres:
-     build: postgres
-     hostname: postgres
-     environment:
-           POSTGRES_USER: root
-           POSTGRES_PASSWORD: elephants
-           POSTGRES_DB: root
-     ports:
-       - "5000:5432"
-     networks:
-       - local
 
   hue:
-     build: hue
-     volumes:
-       - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
-       - "./conf/conf.hue:/etc/hue/conf:ro"
-     networks:
-       - local
+    build: hue
+    hostname: hue
+    depends_on:
+      - yarnresourcemanager
+      - mapreducehistory
+      - hivemetastore
+    ports:
+      # hue server: 8888   
+      - "8888:8888"
+    volumes:
+      - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      # set /etc/hue/conf:rw to create file(migration-done)
+      - "/cdh5/conf/conf.hue:/etc/hue/conf:rw"
+      - hue:/var/lib/hue
+    networks:
+      - local
   
-  kafka:
-     build: kafka
-     hostname: kafka
-     ports:
-           - "9092"
-     volumes:
-       - "./conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
-       - "./kafka/conf:/etc/kafka/conf:ro"
-       - "./conf/conf.hue:/etc/hue/conf:ro"
-     networks:
-       - local
-
-
 networks:
   local:
     external:
       name: cdh5-local
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode1:
+  hivemetastore:
+  hue:

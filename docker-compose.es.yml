@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  es:
+    build: es
+    hostname: es
+    ports:
+      # - es's rest: 9200
+      # - kibanas: 5601
+      - "9200:9200"
+      - "5601:5601"
+    volumes:
+      - es:/var/lib/elasticsearch
+      - kibana:/var/lib/kibana
+    networks:
+      - local
+
+networks:
+  local:
+    external:
+      name: cdh5-local
+
+volumes:
+  es:
+  kibana:

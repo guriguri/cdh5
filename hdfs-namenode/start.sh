@@ -1,8 +1,10 @@
 #!/bin/bash
 set -x
 
-# restart ssh daemon
-/usr/sbin/sshd &
+# start supervisord
+/usr/bin/supervisord &
+
+# start hadoop-hdfs-namenode by daemon
 service hadoop-hdfs-namenode start
 /etc/init.d/daemon hadoop-hdfs-namenode &
 

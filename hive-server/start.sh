@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
 
-# restart ssh daemon
-/usr/sbin/sshd &
+# start supervisord
+/usr/bin/supervisord &
 
 # Wait for DFS to come out of safe mode
 until hdfs dfsadmin -safemode wait
@@ -12,7 +12,7 @@ do
     hdfs dfsadmin -safemode leave
 done
 
-
+# start hive-webhcat-server, hive-server2 by daemon
 service hive-webhcat-server start
 service hive-server2 start
 /etc/init.d/daemon hive-webhcat-server &

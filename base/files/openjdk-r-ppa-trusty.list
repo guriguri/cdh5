@@ -1,0 +1,2 @@
+deb [arch=amd64] http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main
+# deb-src http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main
