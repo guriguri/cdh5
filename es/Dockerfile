@@ -25,8 +25,8 @@ RUN cp /etc/kibana/kibana.yml /etc/kibana/kibana.yml.org
 ADD files/kibana.yml /etc/kibana/kibana.yml
 
 ## for supervisor
-ADD files/elasticsearch.conf /etc/supervisor/conf.d/
-ADD files/kibana.conf /etc/supervisor/conf.d/
+#ADD files/elasticsearch.conf /etc/supervisor/conf.d/
+#ADD files/kibana.conf /etc/supervisor/conf.d/
 
 
 ###########
