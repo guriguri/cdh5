@@ -1,7 +1,11 @@
 # CDH5
 `forked from tilakpatidar/cdh5`  
 `MacOS 환경기준`  
+
 Docker Image for CDH5
+---
+
+[toc]
 
 ### 지원 Service
 * DNS
@@ -72,7 +76,7 @@ $> make create # DOCKER_MACHINE_NAME=cdh5 로 생성
 ```
 
 #### 생성한 docker machine 이미지에 공유 폴더 설정
-![](./shared_folder.png "")
+![](./images/shared_folder.png "")
 
 #### 생성한 docker machine 실행
 ```
@@ -216,11 +220,15 @@ $> /root/mongodb-init.sh # 한번만 해주면 됨!!
 |admin     |admin |adminpasswd|
 |test      |test  |testpasswd |
 
-#### 외부 서버에서 docker machine 연결을 위한 방법
-##### docker machine 서버
-* VirtualBox 이미지에 Port Forwarding 적용 (appendix/virtualbox_nat_port_forwarding.sh 참조)
-##### 접속 외부 Client 서버
-* hdfs-site.xml 의 dfs.client.use.datanode.hostname 적용
+#### 외부 Client 에서 docker machine 연결을 위한 방법
+##### docker machine
+* VirtualBox 이미지에 Port Forwarding 적용
+```
+$> appendix/virtualbox_nat_port_forwarding.sh
+```
+
+##### 외부 Client
+* hdfs-site.xml 에 dfs.client.use.datanode.hostname 적용
 ```
   <!-- for connect in remote -->
   <property>
@@ -228,7 +236,7 @@ $> /root/mongodb-init.sh # 한번만 해주면 됨!!
     <value>true</value>
   </property>
 ```
-* mapred-site.xml 의 yarn.app.mapreduce.am.job.client.port-range 적용
+* mapred-site.xml 에 yarn.app.mapreduce.am.job.client.port-range 적용
 ```
   <!-- for connect by hostname in remote -->
   <property>
