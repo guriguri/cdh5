@@ -119,7 +119,7 @@ env-init:
 
 status: 
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
-	   	docker-compose ps
+	   	docker-compose ${DOCKER_COMPOSE_FILES} ps
 
 build-all:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
