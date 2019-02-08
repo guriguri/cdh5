@@ -121,9 +121,6 @@ $> make oggre-up # for hive-up + Oozie, MongoDB, ElasticSearch
 export HADOOP_CONF_DIR=${CDH5 절대경로}/conf/cluster-conf
 export HADOOP_USER_NAME=${hdfs 에서 사용할 USER NAME}
 export OOZIE_CLIENT_OPTS=-Duser.name=${oozie 에서 사용할 USER NAME}
-
-## docker machine 의 vm.max_map_count 설정 변경 (for ElasticSearch)
-$> sudo sysctl -w vm.max_map_count=262144 # make ssh 로 접속 후
 ```
 
 #### 로컬 Client 설치
