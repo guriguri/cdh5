@@ -52,5 +52,9 @@ VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "mongodb-02,tcp,,28017,,280
 # oozie
 VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "oozie-01,tcp,,11000,,11000"
 
+# es
+VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "es-01,tcp,,9200,,9200"
+VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "es-02,tcp,,5601,,5601"
+
 # kafka
 #VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "kafka-01,tcp,,9092,,9092"
