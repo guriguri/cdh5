@@ -148,8 +148,7 @@ test-mongodb:
 	cd test/mongodb && ./mongodb.sh
 
 test-es: 
-	@echo "todo es"
-	#cd test/es && ./es.sh
+	cd test/es && ./es.sh
 
 remove-volume:
 	@echo ">>>>> remove volatile volumes of ${DOCKER_MACHINE_NAME}"
