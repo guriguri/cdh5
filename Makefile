@@ -62,10 +62,6 @@ help-mongodb:
 
 help-es:
 	@echo "Notes for es"
-	@echo "  modify vm.max_map_count of docker-machine"
-	@echo "    docker-machine ssh ${DOCKER_MACHINE_NAME}"
-	@echo "      sudo sysctl -w vm.max_map_count=262144"
-	@echo ""
 	@echo "  append /etc/hosts to route"
 	@echo "    ${DOCKER_MACHINE_IP} es.${DOCKER_NETWORK_NAME}"
 	@echo ""

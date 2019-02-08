@@ -28,3 +28,7 @@ echo "alias docker_dns='docker exec -it cdh5_dns_1 /bin/bash'" >> /home/docker/.
 echo "alias docker_oozie='docker exec -it cdh5_oozie_1 /bin/bash'" >> /home/docker/.profile
 echo "alias docker_mongodb='docker exec -it cdh5_mongodb_1 /bin/bash'" >> /home/docker/.profile
 echo "alias docker_es='docker exec -it cdh5_es_1 /bin/bash'" >> /home/docker/.profile
+
+# for elasticsearch
+## modify vm.max_map_count of docker-machine
+sudo sysctl -w vm.max_map_count=262144
