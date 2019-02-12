@@ -13,6 +13,24 @@ db.addUser({
 	roles: [
 		"userAdminAnyDatabase",
 		"dbAdminAnyDatabase",
-		"readWriteAnyDatabase"]
+		"clusterAdmin",
+		"readWriteAnyDatabase"
+	]
 })
 EOSQL
+
+
+# modified roles on mongodb v2.4.9
+#db.system.users.update(
+#	{"user": "admin"},
+#	{$set:
+#		{ "roles":
+#			[
+#				"userAdminAnyDatabase",
+#				"dbAdminAnyDatabase",
+#				"clusterAdmin",
+#				"readWriteAnyDatabase"
+#			]
+#		}
+#	}
+#)
