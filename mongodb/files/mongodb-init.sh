@@ -21,6 +21,8 @@ EOSQL
 
 
 # modified roles on mongodb v2.4.9
+# see: https://docs.mongodb.com/v2.4/reference/user-privileges/#roles
+
 #db.system.users.update(
 #	{"user": "admin"},
 #	{$set:
