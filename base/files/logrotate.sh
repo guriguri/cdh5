@@ -12,7 +12,13 @@ done
 
 # remove 
 DAYS=2
-RM_FILES=`find /var/log -ctime +${DAYS} -name *.log -or -ctime ${DAYS} -name *.out`
+RM_FILES=`find /var/log -name *log[.-]* -ctime +${DAYS} -type f -or -name *out[.-]* -ctime +${DAYS} -type f`
+for file in $RM_FILES; do
+        echo "rm -rf $file"
+        rm -rf $file
+done
+
+RM_FILES=`find /var/log -name *.*.log -ctime +${DAYS} -type f -or -name *.*.out -ctime +${DAYS} -type f`
 for file in $RM_FILES; do
         echo "rm -rf $file"
         rm -rf $file
