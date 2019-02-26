@@ -22,7 +22,8 @@ Docker Image for CDH5
 
 ### Web UI
 * HDFS NN: http://hdfsnamenode.cdh5-local:50070
-* MR Historty: http://mapreducehistory.cdh5-local:19888
+* MR Job History: http://mapreducehistory.cdh5-local:19888
+* MR App History: http://mapreducehistory.cdh5-local:8042/logs/containers
 * YARN RM: http://yarnresourcemanager.cdh5-local:8088
 * Hive 2: http://hiveserver.cdh5-local:10002
 * Oozie: http://oozie.cdh5-local:11000
