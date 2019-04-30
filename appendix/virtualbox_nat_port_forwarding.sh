@@ -2,6 +2,9 @@
 
 DOCKER_MACHINE_NAME="cdh5"
 
+# zookeeper
+VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "zookeeper-01,tcp,,2181,,2181"
+
 # hdfsnamenode
 VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "hdfsnamenode-01,tcp,,8020,,8020"
 VBoxManage controlvm "${DOCKER_MACHINE_NAME}" natpf1 "hdfsnamenode-02,tcp,,50070,,50070"
