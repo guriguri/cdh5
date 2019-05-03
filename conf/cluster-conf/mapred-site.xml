@@ -37,6 +37,26 @@
     <value>/user</value>
   </property>
 
+  <!-- cms-lock -->
+  <property>
+    <name>data.cms.lock.server.zookeeper.quorum</name>
+    <value>zookeeper.cdh5-local:2181</value>
+  </property>
+  <property>
+    <name>data.cms.lock.server.zookeeper.port</name>
+    <value>2181</value>
+  </property>
+  <property>
+    <name>data.cms.lock.server.zookeeper.namespace</name>
+    <value>cms_lock_server</value>
+  </property>
+  <property>
+    <name>mapreduce.application.classpath</name>
+    <value>/etc/hadoop/conf/cms-lock/lib/client/cdh5.5.1/*,
+           $HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*,
+           $HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*.</value>
+  </property>
+
   <!-- for connect by hostname in remote
   <property>
     <name>yarn.app.mapreduce.am.job.client.port-range</name>
