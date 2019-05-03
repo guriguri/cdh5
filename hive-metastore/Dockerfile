@@ -12,13 +12,13 @@ RUN apt-get update -y &&\
     ln -s /usr/share/java/mysql-connector-java.jar /usr/lib/hive/lib/mysql-connector-java.jar
 
 ADD mysql-init.sql /root/mysql-init.sql
+ADD my.cnf /root/my.cnf
 
 ## mysql
 RUN DEBIAN_FRONTEND=noninteractive \
 	apt-get install -y --no-install-recommends \
 	mysql-server &&\
-  sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf &&\
-  sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf &&\
+  cp -rf /root/my.cnf /etc/mysql/my.cnf &&\
   echo "mysqld_safe &" > /tmp/config &&\
   echo "mysqladmin --silent --wait=30 ping || exit 1" >> /tmp/config &&\
   echo "mysql < /root/mysql-init.sql" >> /tmp/config &&\
