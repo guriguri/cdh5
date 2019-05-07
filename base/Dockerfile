@@ -51,9 +51,6 @@ ADD files/daemon.sh /etc/init.d/daemon
 RUN chmod 755 /etc/init.d/daemon
 RUN chown root:root /etc/init.d/daemon
 
-## hive
-ADD files/hive-site.xml /etc/hive/conf/hive-site.xml
-
 ## sshd
 ### for running sshd in ubuntu trusty
 ### see https://github.com/docker/docker/issues/5704

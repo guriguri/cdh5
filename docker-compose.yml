@@ -87,6 +87,7 @@ services:
       - "9083:9083"
     volumes:
       - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - "/cdh5/conf/conf.hive:/etc/hive/conf:ro"
       - hivemetastore:/var/lib/mysql
     networks:
       - local
@@ -118,6 +119,7 @@ services:
       - "8888:8888"
     volumes:
       - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - "/cdh5/conf/conf.hive:/etc/hive/conf:ro"
       # set /etc/hue/conf:rw to create file(migration-done)
       - "/cdh5/conf/conf.hue:/etc/hue/conf:rw"
       - hue:/var/lib/hue

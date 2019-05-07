@@ -15,5 +15,6 @@ services:
       - "50111:50111"
     volumes:
       - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
+      - "/cdh5/conf/conf.hive:/etc/hive/conf:ro"
     networks:
       - local
