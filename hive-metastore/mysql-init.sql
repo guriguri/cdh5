@@ -1,3 +1,7 @@
+-- fix debian bug
+-- see /etc/mysql/debian.cnf
+UPDATE mysql.user SET PASSWORD = PASSWORD('drGHetfbqGZ9F2KA') WHERE USER = 'debian-sys-maint';
+
 -- root
 UPDATE mysql.user SET PASSWORD = PASSWORD('rootpasswd') WHERE USER = 'root';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'rootpasswd' WITH GRANT OPTION;
