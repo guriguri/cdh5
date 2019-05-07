@@ -244,6 +244,6 @@ $> appendix/virtualbox_nat_port_forwarding.sh
 ```
 * /etc/hosts 에 clusternode 추가 (예: 192.168.1.5)
 ```
-192.168.1.5 hdfsnamenode.cdh5-local hiveserver.cdh5-local hivemetastore.cdh5-local yarnresourcemanager.cdh5-local mapreducehistory.cdh5-local hue.cdh5-local clusternode.cdh5-local oozie.cdh5-local mongodb.cdh5-local es.cdh5-local
+192.168.1.5 hdfsnamenode.cdh5-local hiveserver.cdh5-local hivemetastore.cdh5-local yarnresourcemanager.cdh5-local mapreducehistory.cdh5-local zookeeper.cdh5-local hue.cdh5-local clusternode.cdh5-local oozie.cdh5-local mongodb.cdh5-local es.cdh5-local
 192.168.1.5 clusternode
 ```

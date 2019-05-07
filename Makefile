@@ -46,7 +46,7 @@ help:
 help-hadoop:
 	@echo "Notes for hadoop"
 	@echo "  append /etc/hosts to route"
-	@echo "    ${DOCKER_MACHINE_IP} hdfsnamenode.${DOCKER_NETWORK_NAME} hiveserver.${DOCKER_NETWORK_NAME} hivemetastore.${DOCKER_NETWORK_NAME} yarnresourcemanager.${DOCKER_NETWORK_NAME} mapreducehistory.${DOCKER_NETWORK_NAME} hue.${DOCKER_NETWORK_NAME} clusternode.${DOCKER_NETWORK_NAME} oozie.${DOCKER_NETWORK_NAME}"
+	@echo "    ${DOCKER_MACHINE_IP} hdfsnamenode.${DOCKER_NETWORK_NAME} hiveserver.${DOCKER_NETWORK_NAME} hivemetastore.${DOCKER_NETWORK_NAME} yarnresourcemanager.${DOCKER_NETWORK_NAME} mapreducehistory.${DOCKER_NETWORK_NAME} zookeeper.${DOCKER_NETWORK_NAME} hue.${DOCKER_NETWORK_NAME} clusternode.${DOCKER_NETWORK_NAME} oozie.${DOCKER_NETWORK_NAME}"
 	@echo ""
 	@echo "  append ~/.bashrc to access on hadoop in local"
 	@echo "    export HADOOP_CONF_DIR=$(PWD)/conf/cluster-conf"
