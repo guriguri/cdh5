@@ -13,12 +13,14 @@ RUN apt-get update -y &&\
 
 ADD mysql-init.sql /root/mysql-init.sql
 ADD my.cnf /root/my.cnf
+ADD debian.cnf /root/debian.cnf
 
 ## mysql
 RUN DEBIAN_FRONTEND=noninteractive \
 	apt-get install -y --no-install-recommends \
 	mysql-server &&\
   cp -rf /root/my.cnf /etc/mysql/my.cnf &&\
+  cp -rf /root/debian.cnf /etc/mysql/debian.cnf &&\
   echo "mysqld_safe &" > /tmp/config &&\
   echo "mysqladmin --silent --wait=30 ping || exit 1" >> /tmp/config &&\
   echo "mysql < /root/mysql-init.sql" >> /tmp/config &&\
