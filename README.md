@@ -176,6 +176,20 @@ $> make remove # 생성한 docker machine 이미지 삭제. 왠만해서는 실�
 ```
 
 ### Trouble Shooting Guide
+#### make build-all `ERROR: SSL error: [SSL: TLSV1_ALERT_PROTOCOL_VERSION]`
+* 에러 메시지
+
+```
+ERROR: SSL error: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:581)
+make: *** [build-all] Error 1
+```
+
+* 조치
+
+```
+export COMPOSE_TLS_VERSION=TLSv1_2
+```
+
 #### make test-mongodb 실패
 * 에러 메시지
 
