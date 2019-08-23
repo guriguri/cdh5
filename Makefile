@@ -68,6 +68,7 @@ help-es:
 
 create:
 	docker-machine create --driver=virtualbox --virtualbox-memory ${VIRTUALBOX_MEMORY} ${DOCKER_MACHINE_NAME}
+	make create-network
 	@echo "Notes"
 	@echo "  add shared folder of vm(${DOCKER_MACHINE_NAME})"
 	@echo "    path: $(PWD)"
@@ -81,10 +82,11 @@ remove:
 create-network: remove-network
 	@echo ">>>>> create docker network ${DOCKER_NETWORK_NAME}"
 	@if [ "$$(docker network ls | grep ${DOCKER_NETWORK_NAME})" = "" ]; then \
-		 docker network create -d bridge \
-		 	--subnet=172.20.0.0/16 --gateway 172.20.0.1 \
-			--ip-range=172.20.0.0/16 \
-			${DOCKER_NETWORK_NAME}; fi
+		eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
+			docker network create -d bridge \
+				--subnet=172.20.0.0/16 --gateway 172.20.0.1 \
+				--ip-range=172.20.0.0/16 \
+				${DOCKER_NETWORK_NAME}; fi
 	@if [ ! -d "/etc/resolver" ]; then \
 	   	sudo mkdir /etc/resolver; fi
 	@DOCKER_HOST_IP=$$(docker-machine ip ${DOCKER_MACHINE_NAME}); \
@@ -94,17 +96,16 @@ create-network: remove-network
 remove-network:
 	@echo ">>>>> remove network config"
 	@if [ "$$(docker network ls | grep ${DOCKER_NETWORK_NAME})" != "" ]; then \
-		docker network remove ${DOCKER_NETWORK_NAME}; fi
+		eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
+	   		docker network remove ${DOCKER_NETWORK_NAME}; fi
 	sudo rm -rf /etc/resolver/${DOCKER_NETWORK_NAME}
 	@sudo route -n delete 172.20.0.0
 
 start:
 	docker-machine start ${DOCKER_MACHINE_NAME}
-	make create-network
 
 stop:
 	docker-machine stop ${DOCKER_MACHINE_NAME}
-	make remove-network
 
 ssh:
 	docker-machine ssh ${DOCKER_MACHINE_NAME}
