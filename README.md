@@ -159,7 +159,7 @@ $> ./sqoop_install.sh
 
 #### Test
 * sqoop 은 테스트를 위해서 MySQL 에 sqoop test 용 계정 및 Database 및 Table 생성 필요
-	* test/sqoop/sqoop.sql 참조
+	* mysql 에 root 로 접속해서 test/sqoop/sqoop.sql 실행
 
 ```
 $> make test-all # 혹은 개별 테스트 ex) make test-mr
