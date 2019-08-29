@@ -3,3 +3,4 @@
 *.swp
 tags
 **/migration-done
+**/mysql-alter-done

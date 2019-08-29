@@ -87,7 +87,7 @@ services:
       - "9083:9083"
     volumes:
       - "/cdh5/conf/cluster-conf:/etc/hadoop/cluster-conf:ro"
-      - "/cdh5/conf/conf.hive:/etc/hive/conf:ro"
+      - "/cdh5/conf/conf.hive:/etc/hive/conf:rw"
       - hivemetastore:/var/lib/mysql
     networks:
       - local

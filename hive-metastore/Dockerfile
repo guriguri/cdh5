@@ -14,6 +14,8 @@ RUN apt-get update -y &&\
 ADD mysql-init.sql /root/mysql-init.sql
 ADD my.cnf /root/my.cnf
 ADD debian.cnf /root/debian.cnf
+COPY mysql-alter.sh /root/mysql-alter.sh
+COPY mysql-alter.sql /root/mysql-alter.sql
 
 ## mysql
 RUN DEBIAN_FRONTEND=noninteractive \

@@ -17,6 +17,11 @@ done
 
 /usr/lib/hive/bin/schematool -dbType mysql -initSchema
 
+# for hangul comment
+if [ -x "/root/mysql-alter.sh" ]; then
+    /root/mysql-alter.sh
+fi
+
 # start hive-metastore by daemon
 service hive-metastore start
 /etc/init.d/daemon hive-metastore &

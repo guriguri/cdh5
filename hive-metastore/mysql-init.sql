@@ -7,7 +7,7 @@ UPDATE mysql.user SET PASSWORD = PASSWORD('rootpasswd') WHERE USER = 'root';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'rootpasswd' WITH GRANT OPTION;
 
 -- hive metastore
-CREATE DATABASE metastore;
+CREATE DATABASE metastore DEFAULT CHARACTER SET UTF8;
 GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'localhost' IDENTIFIED BY 'elephants';
 GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'%' IDENTIFIED BY 'elephants';
 
