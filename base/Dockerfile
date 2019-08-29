@@ -86,6 +86,9 @@ ADD files/cron.conf /etc/supervisor/conf.d/
 ## java
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
+## hangul
+ENV LANG=ko_KR.UTF-8
+ENV LC_ALL=ko_KR.UTF-8
 
 ###########
 # cleanup
