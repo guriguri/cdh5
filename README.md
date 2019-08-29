@@ -39,6 +39,9 @@ Docker Image for CDH5
 	* hadoop, hive 설치용 (https://brew.sh/index_ko)
 * Make
 	* build 등
+* wget
+	* oozie, sqoop 등 web 에서 download 용
+	* `brew install wget` 으로 설치
 
 ### 사용법
 ```
@@ -126,6 +129,7 @@ export OOZIE_CLIENT_OPTS=-Duser.name=${oozie 에서 사용할 USER NAME}
 
 #### 로컬 Client 설치
 * `hadoop, hive 는 brew 필요!!`
+* `oozie, sqoop 은 wget 필요!!`
 
 ##### hadoop 2.8.0
 ```
@@ -231,6 +235,13 @@ $> /root/mongodb-init.sh # 한번만 해주면 됨!!
 |:---------|:-----|:----------|
 |admin     |admin |adminpasswd|
 |test      |test  |testpasswd |
+
+#### 한글 설정
+* beeline 등에서 한글 사용을 위한 설정
+```
+export LANG=ko_KR.UTF-8
+export LC_ALL=ko_KR.UTF-8
+```
 
 #### 외부 Client 에서 docker machine 연결을 위한 방법
 ##### docker machine
