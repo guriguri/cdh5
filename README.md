@@ -212,6 +212,19 @@ $> docker_mongodb # alias docker_mongodb='docker exec -it cdh5_mongodb_1 /bin/ba
 $> /root/mongodb-init.sh # 한번만 해주면 됨!!
 ```
 
+#### kibana `blocked by: [FORBIDDEN/12/index read-only / allow delete (api)]`
+* 원인
+	* ES 에 용량대비 데이터가 지나치가 많이 쌓이면 kibana 에서 데이터를 read-only 모드로 바꿔서 발생
+* 조치
+	* read-only 설정을 false 로 바꿈
+
+```
+$> curl -XPUT -H "Content-Type: application/json" \
+http://es.cdh5-local:9200/_all/_settings \
+-d '{"index.blocks.read_only_allow_delete": false}'
+```
+
+
 ### 기타
 #### 계정정보
 * docker (base/Dockerfile 참조)
