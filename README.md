@@ -7,6 +7,7 @@ Docker Image for CDH5
 
 [toc]
 
+---
 ### 지원 Service
 * DNS
 * Zookeeper
@@ -20,6 +21,8 @@ Docker Image for CDH5
 * ElasticSearch (w/ Kibana)
 * Kafka
 
+
+---
 ### Web UI
 * HDFS NN: http://hdfsnamenode.cdh5-local:50070
 * MR Job History: http://mapreducehistory.cdh5-local:19888
@@ -32,8 +35,12 @@ Docker Image for CDH5
 * ElasticSearch: http://es.cdh5-local:9200
 * Kibana: http://es.cdh5-local:5601
 
+
+---
 ### Requirements
 * Docker (https://www.docker.com/get-started)
+	* Docker Desktop 을 실행할 필요는 없음!!
+	* docker-machine, docker-compose 등 Docker Toolbox 기능만 사용
 * VirtualBox (https://www.virtualbox.org)
 * Brew
 	* hadoop, hive 설치용 (https://brew.sh/index_ko)
@@ -43,6 +50,8 @@ Docker Image for CDH5
 	* oozie, sqoop 등 web 에서 download 용
 	* `brew install wget` 으로 설치
 
+
+---
 ### 사용법
 ```
 $> make help
@@ -71,6 +80,8 @@ Environment
    DOCKER_MACHINE_NAME=cdh5
 ```
 
+
+---
 ### 시작하기
 #### docker machine 이미지 생성 (`한번만 하면 됨!!`)
 * 8G 메모리(VIRTUALBOX_MEMORY=8000)를 갖는 docker machine 이미지(VirtualBox) 생성
@@ -91,7 +102,7 @@ $> make start
 * `make start 이후에 해야함!!`
 
 ```
-$> make env-init
+$> make env-init stop start # 환경 설정 정보를 변경하고 docker machine 을 재기동 해야함!!
 ```
 
 #### 생성한 docker machine 에 docker image 만들기
@@ -179,7 +190,25 @@ $> make hdfs-start # 중지한 docker-compose 재시작
 $> make remove # 생성한 docker machine 이미지 삭제. 왠만해서는 실행할 일 없음!!
 ```
 
+
+---
 ### Trouble Shooting Guide
+#### make create `Error checking TLS connection: Error checking and/or regenerating the certs: There was an error validating certificates`
+* 에러 메시지
+
+```
+Error checking TLS connection: Error checking and/or regenerating the certs: There was an error validating certificates
+```
+
+* 조치
+	* Local 머신의 Network 가 꼬였을 수 있으므로 Reboot
+	* docker-machine 재생성
+
+```
+$> make remove-network
+$> make remove
+```
+
 #### make build-all `ERROR: SSL error: [SSL: TLSV1_ALERT_PROTOCOL_VERSION]`
 * 에러 메시지
 
@@ -225,6 +254,7 @@ http://es.cdh5-local:9200/_all/_settings \
 ```
 
 
+---
 ### 기타
 #### 계정정보
 * docker (base/Dockerfile 참조)
@@ -259,12 +289,14 @@ export LC_ALL=ko_KR.UTF-8
 #### 외부 Client 에서 docker machine 연결을 위한 방법
 ##### docker machine
 * VirtualBox 이미지에 Port Forwarding 적용
+
 ```
 $> appendix/virtualbox_nat_port_forwarding.sh
 ```
 
 ##### 외부 Client
 * hdfs-site.xml 에 dfs.client.use.datanode.hostname 적용
+
 ```
   <!-- for connect in remote -->
   <property>
@@ -272,7 +304,9 @@ $> appendix/virtualbox_nat_port_forwarding.sh
     <value>true</value>
   </property>
 ```
+
 * mapred-site.xml 에 yarn.app.mapreduce.am.job.client.port-range 적용
+
 ```
   <!-- for connect by hostname in remote -->
   <property>
@@ -280,7 +314,9 @@ $> appendix/virtualbox_nat_port_forwarding.sh
     <value>50200-50210</value>
   </property>
 ```
+
 * /etc/hosts 에 clusternode 추가 (예: 192.168.1.5)
+
 ```
 192.168.1.5 hdfsnamenode.cdh5-local hiveserver.cdh5-local hivemetastore.cdh5-local yarnresourcemanager.cdh5-local mapreducehistory.cdh5-local zookeeper.cdh5-local hue.cdh5-local clusternode.cdh5-local oozie.cdh5-local mongodb.cdh5-local es.cdh5-local
 192.168.1.5 clusternode
