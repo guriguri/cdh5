@@ -17,6 +17,9 @@ FILES=$(wildcard docker-compose*.yml)
 DOCKER_COMPOSE_FILES=$(foreach file, ${FILES}, -f ${file})
 DOCKER_NETWORK_NAME=${DOCKER_MACHINE_NAME}-local
 
+# docker-compose's option -p, --project-name NAME     Specify an alternate project name (default: directory name)
+DOCKER_COMPOSE_PROJECT_NAME="-p ${DOCKER_MACHINE_NAME}"
+
 help:
 	@echo ""
 	@echo "Targets"
@@ -47,9 +50,10 @@ help-hadoop:
 	@echo "Notes for hadoop"
 	@echo "  append /etc/hosts to route"
 	@echo "    ${DOCKER_MACHINE_IP} hdfsnamenode.${DOCKER_NETWORK_NAME} hiveserver.${DOCKER_NETWORK_NAME} hivemetastore.${DOCKER_NETWORK_NAME} yarnresourcemanager.${DOCKER_NETWORK_NAME} mapreducehistory.${DOCKER_NETWORK_NAME} zookeeper.${DOCKER_NETWORK_NAME} hue.${DOCKER_NETWORK_NAME} clusternode.${DOCKER_NETWORK_NAME} oozie.${DOCKER_NETWORK_NAME}"
+	@echo "    ${DOCKER_MACHINE_IP} clusternode"
 	@echo ""
 	@echo "  append ~/.bashrc to access on hadoop in local"
-	@echo "    export HADOOP_CONF_DIR=$(PWD)/conf/cluster-conf"
+	@echo "    export HADOOP_CONF_DIR=$(PWD)/conf/cluster-conf.local"
 	@echo "    export HADOOP_USER_NAME=guriguri # custom user name for hdfs, optional"
 	@echo "    export OOZIE_CLIENT_OPTS=-Duser.name=guriguri # custom user name for oozie, optional"
 	@echo ""
@@ -113,15 +117,16 @@ ssh:
 env-init:
 	docker-machine scp appendix/bootlocal.sh ${DOCKER_MACHINE_NAME}:/var/lib/boot2docker
 	docker-machine scp base/files/localtime ${DOCKER_MACHINE_NAME}:/var/lib/boot2docker
+	appendix/virtualbox_nat_port_forwarding.sh
 
 status: 
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
-	   	docker-compose ${DOCKER_COMPOSE_FILES} ps
+	   	docker-compose ${DOCKER_COMPOSE_FILES} ${DOCKER_COMPOSE_PROJECT_NAME} ps
 
 build-all:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	cd base && ./build.sh && cd .. && \
-	   	docker-compose ${DOCKER_COMPOSE_FILES} build
+	   	docker-compose ${DOCKER_COMPOSE_FILES} ${DOCKER_COMPOSE_PROJECT_NAME} build
 
 build-base:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
@@ -129,7 +134,7 @@ build-base:
 
 build-%:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
-	   	docker-compose ${DOCKER_COMPOSE_FILES} build $*
+	   	docker-compose ${DOCKER_COMPOSE_FILES} ${DOCKER_COMPOSE_PROJECT_NAME} build $*
 
 test-all: test-mr test-hive test-oozie test-sqoop test-mongodb test-es
 
@@ -160,30 +165,31 @@ remove-volume:
 hdfs-up: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
-	   	docker-compose up ${DAEMON_FLAG}
+	   	docker-compose ${DOCKER_COMPOSE_PROJECT_NAME} up ${DAEMON_FLAG}
 	@make help-hadoop
 
 hdfs-down: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
-	   	docker-compose down 
+	   	docker-compose ${DOCKER_COMPOSE_PROJECT_NAME} down 
 	@make remove-volume
 
 hdfs-start: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
-	   	docker-compose start
+	   	docker-compose ${DOCKER_COMPOSE_PROJECT_NAME} start
 
 hdfs-stop: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
-	   	docker-compose stop
+	   	docker-compose ${DOCKER_COMPOSE_PROJECT_NAME} stop
 
 hive-up: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			up ${DAEMON_FLAG}
 	@make help-hadoop
 
@@ -192,6 +198,7 @@ hive-down:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			down 
 	@make remove-volume
 
@@ -200,6 +207,7 @@ hive-start:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			start
 
 hive-stop: 
@@ -207,6 +215,7 @@ hive-stop:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			stop
 
 oggre-up: 
@@ -214,9 +223,10 @@ oggre-up:
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
-		   	-f docker-compose.oggre.yml \
-		   	-f docker-compose.mongodb.yml \
-		   	-f docker-compose.es.yml \
+			-f docker-compose.oggre.yml \
+			-f docker-compose.mongodb.yml \
+			-f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			up ${DAEMON_FLAG}
 	@make help-hadoop
 	@make help-mongodb
@@ -228,8 +238,9 @@ oggre-down:
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
 			-f docker-compose.oggre.yml \
-		   	-f docker-compose.mongodb.yml \
-		   	-f docker-compose.es.yml \
+			-f docker-compose.mongodb.yml \
+			-f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			down 
 	@make remove-volume
 
@@ -239,8 +250,9 @@ oggre-start:
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
 			-f docker-compose.oggre.yml \
-		   	-f docker-compose.mongodb.yml \
-		   	-f docker-compose.es.yml \
+			-f docker-compose.mongodb.yml \
+			-f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			start
 
 oggre-stop: 
@@ -249,14 +261,16 @@ oggre-stop:
 	   	docker-compose -f docker-compose.yml \
 			-f docker-compose.hive.yml \
 			-f docker-compose.oggre.yml \
-		   	-f docker-compose.mongodb.yml \
-		   	-f docker-compose.es.yml \
+			-f docker-compose.mongodb.yml \
+			-f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			stop
 
 mongodb-up: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.mongodb.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			up ${DAEMON_FLAG}
 	@make help-mongodb
 
@@ -264,24 +278,28 @@ mongodb-down:
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.mongodb.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			down 
 
 mongodb-start: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.mongodb.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			start
 
 mongodb-stop: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.mongodb.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			stop
 
 es-up: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			up ${DAEMON_FLAG}
 	@make help-es
 
@@ -289,16 +307,19 @@ es-down:
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			down 
 
 es-start: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			start
 
 es-stop: 
 	@echo ">>>>> $@"
 	@eval $$(docker-machine env ${DOCKER_MACHINE_NAME}); \
 	   	docker-compose -f docker-compose.es.yml \
+			${DOCKER_COMPOSE_PROJECT_NAME} \
 			stop

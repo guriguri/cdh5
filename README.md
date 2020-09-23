@@ -131,9 +131,10 @@ $> make oggre-up # for hive-up + Oozie, MongoDB, ElasticSearch
 # oggre-up 일 경우
 ## /etc/hosts 편집
 192.168.99.100 hdfsnamenode.cdh5-local hiveserver.cdh5-local hivemetastore.cdh5-local yarnresourcemanager.cdh5-local mapreducehistory.cdh5-local hue.cdh5-local clusternode.cdh5-local oozie.cdh5-local mongodb.cdh5-local es.cdh5-local
+192.168.99.100 clusternode
 
 ## ~/.bashrc 편집
-export HADOOP_CONF_DIR=${CDH5 절대경로}/conf/cluster-conf
+export HADOOP_CONF_DIR=${CDH5 절대경로}/conf/cluster-conf.local
 export HADOOP_USER_NAME=${hdfs 에서 사용할 USER NAME}
 export OOZIE_CLIENT_OPTS=-Duser.name=${oozie 에서 사용할 USER NAME}
 ```
@@ -287,14 +288,14 @@ export LC_ALL=ko_KR.UTF-8
 ```
 
 #### 외부 Client 에서 docker machine 연결을 위한 방법
-##### docker machine
+##### docker machine (`이미 make env-init 에서 적용되었음!!`)
 * VirtualBox 이미지에 Port Forwarding 적용
 
 ```
 $> appendix/virtualbox_nat_port_forwarding.sh
 ```
 
-##### 외부 Client
+##### 외부 Client (`이미 cluster-conf.local 에 적용되어있음!!`)
 * hdfs-site.xml 에 dfs.client.use.datanode.hostname 적용
 
 ```
@@ -313,11 +314,4 @@ $> appendix/virtualbox_nat_port_forwarding.sh
     <name>yarn.app.mapreduce.am.job.client.port-range</name>
     <value>50200-50210</value>
   </property>
-```
-
-* /etc/hosts 에 clusternode 추가 (예: 192.168.1.5)
-
-```
-192.168.1.5 hdfsnamenode.cdh5-local hiveserver.cdh5-local hivemetastore.cdh5-local yarnresourcemanager.cdh5-local mapreducehistory.cdh5-local zookeeper.cdh5-local hue.cdh5-local clusternode.cdh5-local oozie.cdh5-local mongodb.cdh5-local es.cdh5-local
-192.168.1.5 clusternode
 ```
